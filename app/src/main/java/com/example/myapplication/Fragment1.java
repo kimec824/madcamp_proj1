@@ -1,4 +1,4 @@
-package com.example.myapplication;
+    package com.example.myapplication;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -27,6 +27,15 @@ import java.util.ArrayList;
 
 
 public class Fragment1 extends Fragment {
+
+    public static Fragment1 newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        Fragment1 fragment = new Fragment1();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public class Contact {
         private String name;
@@ -153,6 +162,10 @@ public class Fragment1 extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                ((MainActivity)getActivity()).replaceFragment(Fragment1ContactInfo.newInstance());
+
+/*
                 if (position == 0) {
                     Intent intent = new Intent(getActivity(), Fragment1Activity.class);
                     startActivity(intent);
@@ -161,6 +174,10 @@ public class Fragment1 extends Fragment {
                 } else if (position == 2) {
                     Toast.makeText(getActivity(), "You clicked on the third item", Toast.LENGTH_SHORT).show();
                 }
+
+
+ */
+
             }
         });
 
