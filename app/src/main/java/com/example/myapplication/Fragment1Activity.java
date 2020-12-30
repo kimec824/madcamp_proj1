@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -140,6 +141,7 @@ public class Fragment1Activity extends AppCompatActivity {
 
         String name = names[this.getPosition()];
         String number = numbers[this.getPosition()];
+        String relationship = relationships[this.getPosition()];
         String memo = memos[this.getPosition()];
 
         super.onCreate(savedInstanceState);
@@ -147,10 +149,12 @@ public class Fragment1Activity extends AppCompatActivity {
 
         TextView nameTV = (TextView)findViewById(R.id.name);
         TextView numberTV = (TextView)findViewById(R.id.number);
+        TextView relationshipTV = (TextView)findViewById(R.id.relationship);
         TextView memoTV = (TextView)findViewById(R.id.memo);
 
         nameTV.setText(name);
         numberTV.setText(number);
+        relationshipTV.setText(relationship);
         memoTV.setText(memo);
 
 
