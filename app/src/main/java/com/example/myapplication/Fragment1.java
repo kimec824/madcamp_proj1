@@ -1,5 +1,6 @@
-    package com.example.myapplication;
+package com.example.myapplication;
 
+//import com.example.myapplication.Contact;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 
+
 public class Fragment1 extends Fragment {
 
     public static Fragment1 newInstance() {
@@ -37,36 +39,6 @@ public class Fragment1 extends Fragment {
         return fragment;
     }
 
-    public class Contact {
-        private String name;
-        private String number;
-        private String relationship;
-        private String memo;
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public String getNumber() {
-            return number;
-        }
-        public void setNumber(String number) {
-            this.number = number;
-        }
-        public String getRelationship() {
-            return relationship;
-        }
-        public void setRelationship(String relationship) {
-            this.relationship = relationship;
-        }
-        public String getMemo() {
-            return memo;
-        }
-        public void setMemo(String memo) {
-            this.memo = memo;
-        }
-    }
 
     public String get_json(){
         String json = "";
@@ -111,8 +83,6 @@ public class Fragment1 extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private String[] getNameList(ArrayList<Contact> contacts) {
@@ -132,15 +102,12 @@ public class Fragment1 extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
 
         View view = inflater.inflate(R.layout.fragment1_layout, container, false);
 
@@ -163,7 +130,12 @@ public class Fragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ((MainActivity)getActivity()).replaceFragment(Fragment1ContactInfo.newInstance());
+                //((MainActivity)getActivity()).replaceFragment(Fragment1ContactInfo.newInstance(position));
+
+                Intent intent = new Intent(getActivity(), Fragment1Activity.class);
+
+                intent.putExtra("position", position);
+                startActivity(intent);
 
 /*
                 if (position == 0) {
