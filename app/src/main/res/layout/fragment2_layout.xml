@@ -7,12 +7,15 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Camera Roll"
-        android:textSize="30sp"
-        />
+    <GridView
+        android:id="@+id/cameraRoll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"/>
+
+
 
 
 </LinearLayout>
