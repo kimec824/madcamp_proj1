@@ -153,10 +153,9 @@ public class Fragment1 extends Fragment {
 
             }
         });
-
+//TODO: 추가버튼 클릭시 앱 멈춤 문제 발생
         Button button = (Button)view.findViewById(R.id.Addbutton);
         button.setOnClickListener(new View.OnClickListener(){
-            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddActivity.class);
                 startActivity(intent);
