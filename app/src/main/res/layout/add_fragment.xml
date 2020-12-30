@@ -34,6 +34,7 @@
                 android:src="@drawable/person" />
 
             <EditText
+                android:id="@+id/Editname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -60,6 +61,7 @@
                 android:src="@drawable/phone" />
 
             <EditText
+                android:id="@+id/Editphonenumber"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -85,6 +87,7 @@
                 android:src="@drawable/relationship" />
 
             <EditText
+                android:id="@+id/Editrelationship"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -110,6 +113,7 @@
                 android:src="@drawable/memo" />
 
             <EditText
+                android:id="@+id/Editmemo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"

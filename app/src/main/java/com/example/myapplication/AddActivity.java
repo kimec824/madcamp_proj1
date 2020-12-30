@@ -1,6 +1,7 @@
     package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,15 +33,44 @@ import java.util.ArrayList;
 
 
     public class AddActivity extends AppCompatActivity{
+        EditText name;
+        String shared = "file";
+        Button button;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.add_fragment);
+            button=(Button)findViewById(R.id.Confirmbutton);
+            name= (EditText)findViewById(R.id.Editname);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openMainActivity();
+                }
+            });
         }
-        public void onClick(View view) {
+
+        public void openMainActivity() {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
-    }
-        //확인버튼 누를 시 json 파일에 저장하고 fragment1으로 다시 돌아가게 함
 
+        }
+
+        /*
+        @Override
+        protected void onStart() {
+            super.onStart();
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void OnClick(View view) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+         */
+    }
