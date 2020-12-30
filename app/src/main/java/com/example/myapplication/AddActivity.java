@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -30,9 +32,14 @@ import java.util.ArrayList;
 
     public class AddActivity extends AppCompatActivity{
         @Override
-        protected void onCreate(Bundle savedInstanceState)
-        {
+        protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.add_fragment);
         }
+        public void onClick(View view) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
+        //확인버튼 누를 시 json 파일에 저장하고 fragment1으로 다시 돌아가게 함
+
