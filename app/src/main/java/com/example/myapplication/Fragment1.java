@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.runner.Describable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,14 +31,16 @@ import java.util.ArrayList;
 
 
 public class Fragment1 extends Fragment {
-
-    public static Fragment1 newInstance() {
-        
+    private static final String KEY="key";
+    private Contactjson mcontacts;
+    public static Fragment1 newInstance(Contactjson contacts) {
+        Fragment1 fragment1 = new Fragment1();
         Bundle args = new Bundle();
-        
-        Fragment1 fragment = new Fragment1();
-        fragment.setArguments(args);
-        return fragment;
+        args.putSerializable("key",contacts);
+        fragment1.setArguments(args);
+        //Fragment1 fragment = new Fragment1();
+        //fragment.setArguments(args);
+        return fragment1;
     }
 
 
@@ -64,7 +67,7 @@ public class Fragment1 extends Fragment {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            JSONArray contactArray = jsonObject.getJSONArray("연락처");
+            JSONArray contactArray = jsonObject.getJSONArray("contact");
 
 
             for (int i = 0; i < contactArray.length(); i++) {
@@ -72,10 +75,10 @@ public class Fragment1 extends Fragment {
 
                 Contact contact = new Contact();
 
-                contact.setName(contactObj.getString("이름"));
-                contact.setNumber(contactObj.getString("전화번호"));;
-                contact.setRelationship(contactObj.getString("관계"));
-                contact.setMemo(contactObj.getString("메모"));
+                contact.setName(contactObj.getString("name"));
+                contact.setNumber(contactObj.getString("number"));;
+                contact.setRelationship(contactObj.getString("relationship"));
+                contact.setMemo(contactObj.getString("memo"));
 
                 contacts.add(contact);
 
@@ -110,12 +113,17 @@ public class Fragment1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        mcontacts = (Contactjson)getArguments().getSerializable("key");
         View view = inflater.inflate(R.layout.fragment1_layout, container, false);
+        //Contactjson contacts = new Contactjson();
+        mcontacts.main(mcontacts.contacts);
+        //ArrayList<Contact> contacts = new ArrayList<Contact>();
 
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
-        jsonParsing(get_json(), contacts);
 
-        String[] names = getNameList(contacts);
+
+        jsonParsing(get_json(), mcontacts.contacts);
+
+        String[] names = getNameList(mcontacts.contacts);
 
         ListView listView;
         listView = (ListView) view.findViewById(R.id.contactList);
@@ -157,6 +165,8 @@ public class Fragment1 extends Fragment {
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddActivity.class);
+                //add activity 열 때 contacts 리스트도 함께 전송해야 함.
+                intent.putExtra("key",mcontacts);
                 startActivity(intent);
             }
         });

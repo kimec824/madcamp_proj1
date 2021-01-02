@@ -47,7 +47,7 @@ public class Fragment1Activity extends AppCompatActivity {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            JSONArray contactArray = jsonObject.getJSONArray("연락처");
+            JSONArray contactArray = jsonObject.getJSONArray("contact");
 
 
             for (int i = 0; i < contactArray.length(); i++) {
@@ -55,10 +55,10 @@ public class Fragment1Activity extends AppCompatActivity {
 
                 Contact contact = new Contact();
 
-                contact.setName(contactObj.getString("이름"));
-                contact.setNumber(contactObj.getString("전화번호"));;
-                contact.setRelationship(contactObj.getString("관계"));
-                contact.setMemo(contactObj.getString("메모"));
+                contact.setName(contactObj.getString("name"));
+                contact.setNumber(contactObj.getString("number"));;
+                contact.setRelationship(contactObj.getString("relationship"));
+                contact.setMemo(contactObj.getString("memo"));
 
                 contacts.add(contact);
 
