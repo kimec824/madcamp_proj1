@@ -31,6 +31,8 @@ import java.util.ArrayList;
 
 public class Fragment1 extends Fragment {
 
+    Contactlist contacts=new Contactlist();
+
     public static Fragment1 newInstance() {
         
         Bundle args = new Bundle();
@@ -41,57 +43,12 @@ public class Fragment1 extends Fragment {
     }
 
 
-    public String get_json(){
-        String json = "";
-        try{
-            InputStream is = getContext().getAssets().open("contact.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
+    private String[] getNameList(Contactlist contactlist) {//fragment1에서 이름 보여주기 위한 string 배열
 
-            json = new String(buffer, "UTF-8");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return json;
-    }
-
-    private void jsonParsing (String json, ArrayList<Contact> contacts)  {
-
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-
-            JSONArray contactArray = jsonObject.getJSONArray("연락처");
-
-
-            for (int i = 0; i < contactArray.length(); i++) {
-                JSONObject contactObj = contactArray.getJSONObject(i);
-
-                Contact contact = new Contact();
-
-                contact.setName(contactObj.getString("이름"));
-                contact.setNumber(contactObj.getString("전화번호"));;
-                contact.setRelationship(contactObj.getString("관계"));
-                contact.setMemo(contactObj.getString("메모"));
-
-                contacts.add(contact);
-
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String[] getNameList(ArrayList<Contact> contacts) {
-
-        int length = contacts.size();
+        int length = contactlist.contacts.size();
         String[] nameList = new String[length];
         for (int i = 0; i < length; i++) {
-            Contact contact = contacts.get(i);
+            Contact contact = contactlist.contacts.get(i);
             String name = contact.getName();
             nameList[i] = name;
         }
@@ -111,9 +68,10 @@ public class Fragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment1_layout, container, false);
+        super.onViewCreated(view,savedInstanceState);
 
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
-        jsonParsing(get_json(), contacts);
+        Contactlist contacts = new Contactlist();
+        contacts.main();
 
         String[] names = getNameList(contacts);
 
@@ -156,8 +114,7 @@ public class Fragment1 extends Fragment {
         Button button = (Button)view.findViewById(R.id.Addbutton);
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                startActivity(intent);
+                ((MainActivity)getActivity()).replaceFragment(AddActivity.newInstance());
             }
         });
 

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -34,62 +35,57 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 
-    public class AddActivity extends AppCompatActivity{
+    public class AddActivity extends Fragment {
+        Contactlist contacts;//live data, view model 사용하려고 추가
+
+
         EditText name;
         EditText phonenumber;
         EditText relationship;
         EditText memo;
         Button button;
+        public static AddActivity newInstance() {
 
+            Bundle args = new Bundle();
+
+            AddActivity addActivity = new AddActivity();
+            addActivity.setArguments(args);
+            return addActivity;
+        }
         @Override
-        protected void onCreate(Bundle savedInstanceState) {
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.add_fragment);
-            Contact contact=new Contact();
-            button=(Button)findViewById(R.id.Confirmbutton);
-            
-            name= (EditText)findViewById(R.id.Editname);
-            phonenumber= (EditText)findViewById(R.id.Editphonenumber);
-            relationship= (EditText)findViewById(R.id.Editrelationship);
-            memo= (EditText)findViewById(R.id.Editmemo);
+            View view = inflater.inflate(R.layout.add_fragment, container, false);
+            super.onViewCreated(view, savedInstanceState);
+            Contact contact = new Contact();
 
+            contacts = new ViewModelProvider(requireActivity()).get(Contactlist.class);//live data, view model 사용 위해 추가
+
+            name = (EditText) getView().findViewById(R.id.Editname);
+            phonenumber = (EditText) getView().findViewById(R.id.Editphonenumber);
+            relationship = (EditText) getView().findViewById(R.id.Editrelationship);
+            memo = (EditText) getView().findViewById(R.id.Editmemo);
+
+            button = (Button) getView().findViewById(R.id.Confirmbutton);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //name 말고 Editname 써줘도 되지 않나?
-                    //TODO: 에러케이스 알림 출력
+                    if (name.getText().toString() == "") {
+                        Toast.makeText(getContext(), "Please enter 'name'.", Toast.LENGTH_LONG).show();
+                    }
+                    if (phonenumber.getText().toString() == "") {
+                        Toast.makeText(getContext(), "Please enter 'number'.", Toast.LENGTH_LONG).show();
+                    }
                     contact.setName(name.getText().toString());
                     contact.setNumber(phonenumber.getText().toString());
                     contact.setRelationship(relationship.getText().toString());
                     contact.setMemo(memo.getText().toString());
-                    System.out.println(contact.getName());
-                    //TODO: contact.json 파일에 json 들어갈 수 있도록 구현
-                   // UseGSONapitoConvertJavaOBJtoJASONstring.main(contact);
-                    //Toast myToast=Toast.makeText(this.getApplicationContext(), "end input contact", Toast.LENGTH_SHORT);
-                    //myToast.show();
-                    openMainActivity();
+                    //System.out.println(contact.getName()); contact 객체에 제대로 들어가나 확인
+                    contacts.addContacts(contact);
+                    ((MainActivity) getActivity()).replaceFragment(Fragment1.newInstance());
                 }
             });
+            return view;
         }
-
-        public void openMainActivity() {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
-
-        /*
-        @Override
-        protected void onStart() {
-            super.onStart();
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void OnClick(View view) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-         */
     }
+
