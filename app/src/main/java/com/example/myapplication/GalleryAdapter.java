@@ -95,10 +95,6 @@ public class GalleryAdapter extends BaseAdapter {
         ViewHolder holder = null;
 
         if (row == null) {
-
-            System.out.println(position);
-            System.out.println("The view is null");
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.gallery_item, parent, false);
             //Now the variable 'row' holds the entire layout defined in gallery_item.xml.
@@ -112,8 +108,6 @@ public class GalleryAdapter extends BaseAdapter {
             //setTag() is a special method of the View class. It can save an object to be used next time when it needs to be recycled.
 
         } else {
-            System.out.println(position);
-            System.out.println("The view is not null, recycling");
             holder = (ViewHolder) row.getTag();
         }
 
@@ -135,7 +129,6 @@ public class GalleryAdapter extends BaseAdapter {
                 .dontAnimate()
                 .into(imageView);
     }
-
 }
 
 

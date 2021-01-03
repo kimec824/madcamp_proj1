@@ -1,9 +1,12 @@
 package com.example.myapplication;
 
 //import com.example.myapplication.Contact;
+
+import android.database.Cursor;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +14,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class Fragment1 extends Fragment {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            JSONArray contactArray = jsonObject.getJSONArray("연락처");
+            JSONArray contactArray = jsonObject.getJSONArray("phoneBook");
 
 
             for (int i = 0; i < contactArray.length(); i++) {
@@ -72,10 +72,10 @@ public class Fragment1 extends Fragment {
 
                 Contact contact = new Contact();
 
-                contact.setName(contactObj.getString("이름"));
-                contact.setNumber(contactObj.getString("전화번호"));;
-                contact.setRelationship(contactObj.getString("관계"));
-                contact.setMemo(contactObj.getString("메모"));
+                contact.setName(contactObj.getString("name"));
+                contact.setNumber(contactObj.getString("number"));;
+                contact.setRelationship(contactObj.getString("relationship"));
+                contact.setMemo(contactObj.getString("memo"));
 
                 contacts.add(contact);
 
@@ -116,6 +116,34 @@ public class Fragment1 extends Fragment {
         jsonParsing(get_json(), contacts);
 
         String[] names = getNameList(contacts);
+
+
+
+
+        String[] arrProjection = {
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.DISPLAY_NAME
+        };
+
+
+        Cursor clsCursor = getContext().getContentResolver().query (
+                ContactsContract.Contacts.CONTENT_URI,
+                arrProjection,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER +"=1",
+                null, null
+        );
+
+        while (clsCursor.moveToNext()) {
+            Log.d("ID", "사용자 ID: " + clsCursor.getString(0));
+            Log.d("Name", "사용자 이름: " + clsCursor.getString(1));
+        }
+
+
+
+
+
+
+
 
         ListView listView;
         listView = (ListView) view.findViewById(R.id.contactList);
