@@ -91,7 +91,7 @@ public class Fragment1 extends Fragment {
 
                 //((MainActivity)getActivity()).replaceFragment(Fragment1ContactInfo.newInstance(position));
 
-                Intent intent = new Intent(getActivity(), Fragment1Activity.class);
+                Intent intent = new Intent(getContext(), Fragment1Activity.class);
 
                 intent.putExtra("position", position);
                 startActivity(intent);
