@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity android:name=".Stopwatch" />
         <activity android:name=".Fragment2Activity" />
         <activity android:name=".Fragment1Activity" />
         <activity android:name=".AddActivity" />
