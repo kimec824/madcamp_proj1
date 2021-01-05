@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +17,10 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+
 import java.io.File;
+import java.util.ArrayList;
 
 public class Fragment2Activity extends AppCompatActivity {
 
@@ -58,6 +62,31 @@ public class Fragment2Activity extends AppCompatActivity {
 
         Bitmap myBitmap = BitmapFactory.decodeFile(pathList.get(position).getAbsolutePath());
         image.setImageBitmap(myBitmap);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        System.out.println("frag2 activity pausing");
+        Context context = getApplicationContext();
+
+        HashList hashList = HashList.getInstance();
+        ArrayList<Integer> bookmarkList = hashList.getList();
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        JSONArray a = new JSONArray();
+
+        for (int i = 0; i < bookmarkList.size(); i++) {
+            a.put(bookmarkList.get(i));
+        }
+        if (!bookmarkList.isEmpty()) {
+            editor.putString("key", a.toString());
+        } else {
+            editor.putString("key", null);
+        }
+        editor.apply();
     }
 
     class OnClickNext implements View.OnClickListener {

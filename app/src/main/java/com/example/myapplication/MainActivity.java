@@ -19,6 +19,10 @@ import com.example.myapplication.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_CONTACTS
     };
     SharedPreferences mPrefs;
-
-    static HashList hashList;
 
 
     @Override
@@ -81,24 +83,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         GalleryAdapter galleryAdapter = new GalleryAdapter(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-/*
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(hashList);
-        prefsEditor.putString("bookmark_list", json);
-        Boolean b = prefsEditor.commit();
-        System.out.println(b);
+        System.out.println("main activity pausing");
 
- */
+        HashList hashList = HashList.getInstance();
+        ArrayList<Integer> bookmarkList = hashList.getList();
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        JSONArray a = new JSONArray();
+
+        for (int i = 0; i < bookmarkList.size(); i++) {
+            a.put(bookmarkList.get(i));
+        }
+        if (!bookmarkList.isEmpty()) {
+            editor.putString("key", a.toString());
+        } else {
+            editor.putString("key", null);
+        }
+        editor.apply();
     }
 
     public void replaceFragment(Fragment fragment) {

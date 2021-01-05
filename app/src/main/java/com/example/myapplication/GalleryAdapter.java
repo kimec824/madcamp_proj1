@@ -15,7 +15,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static com.example.myapplication.MainActivity.bookmark;
@@ -26,6 +30,7 @@ public class GalleryAdapter extends BaseAdapter {
     File dcimFolder;
     File downloadFolder;
     File pictureFolder;
+    File cameraFolder;
     Context context;
 
     GalleryAdapter(Context context) {
@@ -36,10 +41,12 @@ public class GalleryAdapter extends BaseAdapter {
         dcimFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM");
         downloadFolder = new File(Environment.getExternalStorageDirectory() + "/Download");
         pictureFolder = new File(Environment.getExternalStorageDirectory() + "/Pictures");
+        cameraFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
 
         galleryAdapterHelper.append(dcimFolder);
         galleryAdapterHelper.append(downloadFolder);
         galleryAdapterHelper.append(pictureFolder);
+        galleryAdapterHelper.append(cameraFolder);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class GalleryAdapter extends BaseAdapter {
         View row = convertView;
         ViewHolder holder = null;
 
-        if (row == null) {
+        //if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.gallery_item, parent, false);
 
@@ -71,9 +78,9 @@ public class GalleryAdapter extends BaseAdapter {
 
             row.setTag(holder);
 
-        } else {
-            holder = (ViewHolder) row.getTag();
-        }
+       // } else {
+        //    holder = (ViewHolder) row.getTag();
+        //}
 
         loadImage(context, pathList, position, holder.imageView);
         row.setLayoutParams(new ViewGroup.LayoutParams(320,320));
@@ -100,8 +107,25 @@ class GalleryAdapterHelper {
     int i;
 
     GalleryAdapterHelper (Boolean b, Context context) {
-
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = mPrefs.getString("key", null);
+        ArrayList<Integer> bookmarkList = new ArrayList<Integer>();
+
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+                for (int i = 0; i < a.length(); i++) {
+                    String hash = a.optString(i);
+                    bookmarkList.add((Integer) Integer.parseInt(hash));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        hashList.setList(bookmarkList);
+
+        System.out.println(bookmarkList);
 
         bookmark = b;
         pathList.clear();
@@ -116,12 +140,12 @@ class GalleryAdapterHelper {
 
             for (i = 0; i < filePathList.length; i++ ) {
                 file = filePathList[i];
-                if (file.isDirectory()) {
-                    append(file);
-                } else {
-                    if (!((file.toString().contains(".thumbnails")) && (file.toString().contains(".dat"))))
+                //if (file.isDirectory()) {
+                //    append(file);
+                //} else {
+                    if (!((file.toString().contains(".thumbnails")) && (file.toString().contains(".dat"))) && !file.isDirectory())
                         pathList.add(file);
-                }
+                //}  
             }
         } else if (folder.exists() && bookmark) {
             filePathList = folder.listFiles();
