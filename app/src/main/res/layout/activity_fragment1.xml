@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -14,12 +13,14 @@
             android:id="@+id/image"
             android:src="@drawable/person"/>
         <LinearLayout
+            android:id="@+id/nameLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/image">
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -29,19 +30,21 @@
                 android:maxHeight="25dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/person"/>
-            <TextView
+            <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:id="@+id/name"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/numberLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/nameLinearLayout">
 
             <ImageView
                 android:layout_width="0dp"
@@ -52,12 +55,21 @@
                 android:maxHeight="25dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/phone"/>
-            <TextView
+            <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:id="@+id/number"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="delete"
+            android:layout_alignParentBottom="true"
+            />
+        <!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +116,7 @@
                 android:layout_weight="4"
                 android:id="@+id/memo"/>
         </LinearLayout>
+        -->
 
 
-    </LinearLayout>
-</ScrollView>
+    </RelativeLayout>

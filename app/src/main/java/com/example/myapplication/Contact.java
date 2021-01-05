@@ -3,41 +3,28 @@ package com.example.myapplication;
 
 public class Contact {
 
-    private String name;
-    private String number;
-    private String relationship;
-    private String memo;
+    public String name;
+    public String number;
 
-    public String getName() {
-        return name;
+    public Contact (String name, String number){
+        this.name = name;
+        this.number = number;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
     public void setNumber(String number) {
         this.number = number;
     }
 
-    public String getRelationship() {
-        return relationship;
+    public String getName() {
+        return this.name;
     }
 
-    public void setRelationship(String relationship) {
-        this.relationship = relationship;
+    public String getNumber() {
+        return this.number;
     }
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
 }
+

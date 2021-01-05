@@ -2,14 +2,13 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -18,13 +17,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-
+import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    //static PathList pathListInstance = PathList.getInstance();
-    //static HashList hashListInstance = HashList.getInstance();
     static boolean bookmark = false;
     Context context;
     String[] permissions = {
@@ -33,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS
     };
+    SharedPreferences mPrefs;
+
+    static HashList hashList;
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -49,20 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);;
+
         context = getApplicationContext();
 
-        checkPermission(context, permissions[0]);
-        checkPermission(context, permissions[1]);
-        checkPermission(context, permissions[2]);
+        checkPermission(context, permissions);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Fragment1 frag = Fragment1.newInstance();
-        //getSupportFragmentManager().beginTransaction().add(R.id.view_pager, frag).commit();
-
-        //FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        //fragmentTransaction.add(R.id.view_pager, Fragment1.newInstance()).commit();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -71,15 +66,17 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
     }
 
+    public void checkPermission(Context context, String[] permissions) {
+        Boolean b = true;
 
-    public void checkPermission(Context context, String permission) {
-        if(ActivityCompat.checkSelfPermission(context, permission)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-                    permission,
-            },1);
+        for (int i=0; i <permissions.length; i++) {
+            b = (ActivityCompat.checkSelfPermission(context, permissions[i]) == PackageManager.PERMISSION_GRANTED) && b;
+        }
+
+        if (!b) {
+            ActivityCompat.requestPermissions(MainActivity.this,permissions,1);
         }
     }
-
 
     @Override
     protected void onResume() {
@@ -88,11 +85,24 @@ public class MainActivity extends AppCompatActivity {
         GalleryAdapter galleryAdapter = new GalleryAdapter(this);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+/*
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(hashList);
+        prefsEditor.putString("bookmark_list", json);
+        Boolean b = prefsEditor.commit();
+        System.out.println(b);
+
+ */
+    }
 
     public void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.view_pager, fragment).commit();
     }
-
-
 }

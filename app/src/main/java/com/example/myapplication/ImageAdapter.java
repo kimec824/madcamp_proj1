@@ -37,5 +37,4 @@ public class ImageAdapter extends BaseAdapter {
         return null;
     }
 
-
 }

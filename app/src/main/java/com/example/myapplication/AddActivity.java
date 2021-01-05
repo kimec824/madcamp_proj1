@@ -5,53 +5,55 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.gson.Gson;
+
 
 public class AddActivity extends AppCompatActivity {
-    EditText name;
-    EditText phonenumber;
+    EditText nameText;
+    String name = "";
+    EditText phonenumberText;
     EditText relationship;
     EditText memo;
     Button button;
-    Contact contact = new Contact();
+    ContactList contacts = ContactList.getInstance();
+    CreateContact cc = new CreateContact();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_fragment);
-        Contact contact=new Contact();
-        button=(Button)findViewById(R.id.Confirmbutton);
 
-        name= (EditText)findViewById(R.id.Editname);
-        phonenumber= (EditText)findViewById(R.id.Editphonenumber);
+        nameText= (EditText)findViewById(R.id.Editname);
+        phonenumberText= (EditText)findViewById(R.id.Editphonenumber);
         relationship= (EditText)findViewById(R.id.Editrelationship);
         memo= (EditText)findViewById(R.id.Editmemo);
 
+        button = (Button)findViewById(R.id.Confirmbutton);
+
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //name 말고 Editname 써줘도 되지 않나?
-                //TODO: 에러케이스 알림 출력
-                contact.setName(name.getText().toString());
-                contact.setNumber(phonenumber.getText().toString());
-                contact.setRelationship(relationship.getText().toString());
-                contact.setMemo(memo.getText().toString());
-                System.out.println(contact.getName());
-                //TODO: contact.json 파일에 json 들어갈 수 있도록 구현
-                // UseGSONapitoConvertJavaOBJtoJASONstring.main(contact);
-                //Toast myToast=Toast.makeText(this.getApplicationContext(), "end input contact", Toast.LENGTH_SHORT);
-                //myToast.show();
-                openMainActivity();
+                if (nameText.getText() == null) {
+                    Toast.makeText(getApplicationContext(), "The name field does not exist.", Toast.LENGTH_SHORT).show();
+                } else {
+                    name = nameText.getText().toString().trim();
+
+                    if (contacts.exists(name)) {
+                        Toast.makeText(getApplicationContext(), "The name " + name + " already exists in the contact.", Toast.LENGTH_SHORT).show();
+                    } else if (name.equals("")) {
+                        Toast.makeText(getApplicationContext(), "The name field does not exist.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        cc.createContact(nameText, phonenumberText, getApplicationContext());
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        getApplicationContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                }
             }
         });
-
-    }
-
-    public void openMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
 }
+

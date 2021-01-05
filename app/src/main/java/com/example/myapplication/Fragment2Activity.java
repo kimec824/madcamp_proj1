@@ -3,29 +3,31 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 
 public class Fragment2Activity extends AppCompatActivity {
 
-    //int imageId;
     private int position;
-    //IdList idList;
     PathList pathList = PathList.getInstance();
     HashList hashList = HashList.getInstance();
     ImageView image;
     Button previous;
     Button next;
     CheckBox bookmarkCheckbox;
+    SharedPreferences mPrefs;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -33,12 +35,8 @@ public class Fragment2Activity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            //imageId = extras.getInt("id");
             position = extras.getInt("position");
         }
-
-        //idList = (IdList) getIntent().getSerializableExtra("idList");
-        //pathList = (PathList) getIntent().getSerializableExtra("pathList");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment2);
@@ -54,32 +52,12 @@ public class Fragment2Activity extends AppCompatActivity {
             bookmarkCheckbox.setChecked(false);
         }
 
-
         previous.setOnClickListener(new OnClickPrev());
         next.setOnClickListener(new OnClickNext());
         bookmarkCheckbox.setOnCheckedChangeListener(new onClickCheckbox());
 
-        //image.setImageResource(idList.get(position));
         Bitmap myBitmap = BitmapFactory.decodeFile(pathList.get(position).getAbsolutePath());
         image.setImageBitmap(myBitmap);
-
-        /*
-        image.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeTop() {
-
-            }
-            public void onSwipeRight() {
-                image.setImageResource(idList.get(position + 1));
-            }
-            public void onSwipeLeft() {
-                image.setImageResource(idList.get(position - 1));
-            }
-            public void onSwipeBottom() {
-
-            }
-        });
-
-         */
     }
 
     class OnClickNext implements View.OnClickListener {
@@ -87,12 +65,6 @@ public class Fragment2Activity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (position < pathList.size() - 1) {
-                /*
-                image.setImageResource(idList.get(position + 1));
-                position += 1;
-
-                 */
-
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathList.get(position + 1).getAbsolutePath());
                 image.setImageBitmap(myBitmap);
                 position += 1;
@@ -112,15 +84,10 @@ public class Fragment2Activity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (position > 0) {
-                /*
-                image.setImageResource(idList.get(position - 1));
-                position -= 1;
-
-                 */
-
                 Bitmap myBitmap = BitmapFactory.decodeFile(pathList.get(position - 1).getAbsolutePath());
                 image.setImageBitmap(myBitmap);
                 position -= 1;
+
 
                 if (hashList.contains(pathList.get(position))) {
                     bookmarkCheckbox.setChecked(true);
