@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,7 @@ public class Fragment3 extends Fragment {
     int alarmHour;
     int alarmMinute;
     Calendar alarmCalendar;
-    Context context;
+   // Context context;
 
     public static Fragment3 newInstance() {
 
@@ -43,32 +44,10 @@ public class Fragment3 extends Fragment {
     }
 
 
-    void setAlarm() {
-        alarmCalendar = Calendar.getInstance();
-        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(Calendar.HOUR_OF_DAY,alarmHour);
-        alarmCalendar.set(Calendar.MINUTE,alarmMinute);
-        alarmCalendar.set(Calendar.SECOND,0);
-        //TimePickerDialog에서 설정한 시간을 알람시간으로 설정
-        //System.out.println(alarmCalendar.getTime());
-        if(alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE,1);
-        Intent alarmIntent=new Intent(getActivity(),Alarm_Receiver.class);///////
-        AlarmManager alarmManager=(AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);/////////
-        alarmIntent.setAction(Alarm_Receiver.ACTION_RESTART_SERVICE);
-        PendingIntent alarmCallPendingIntent=PendingIntent.getBroadcast(getActivity(),0,alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);/////
-        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
-        //startActivity(alarmIntent);
-
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
-        else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment3_layout, container, false);
         super.onViewCreated(view,savedInstanceState);
         //AlarmManager alarm_manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -93,4 +72,32 @@ public class Fragment3 extends Fragment {
         });
         return view;
     }
+    void setAlarm() {
+        alarmCalendar = Calendar.getInstance();
+        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendar.set(Calendar.HOUR_OF_DAY,alarmHour);
+        alarmCalendar.set(Calendar.MINUTE,alarmMinute);
+        alarmCalendar.set(Calendar.SECOND,0);
+        //TimePickerDialog에서 설정한 시간을 알람시간으로 설정
+        //System.out.println(alarmCalendar.getTime());
+        if(alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE,1);
+        Intent alarmIntent=new Intent(getActivity().getApplicationContext(),Alarm_Receiver.class);///////
+        AlarmManager alarmManager=(AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);/////////
+        alarmIntent.setAction(Alarm_Receiver.ACTION_RESTART_SERVICE);
+        PendingIntent alarmCallPendingIntent=PendingIntent.getBroadcast(getContext(),0,alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);/////
+        //alarmManager.set(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
+        //startActivity(alarmIntent);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
+        {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
+        }
+        else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
+        }
+
+    }
+
+
+
 }

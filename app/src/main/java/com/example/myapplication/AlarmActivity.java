@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.ebanx.swipebtn.SwipeButton;
 import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity{
+
     Calendar calendar;
     SwipeButton swipeButton;
     TextView timeText;
@@ -20,6 +22,8 @@ public class AlarmActivity extends AppCompatActivity{
     boolean flag=true;
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        Log.d("alarm activity","created");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_execute);
         calendar=Calendar.getInstance();
@@ -27,16 +31,21 @@ public class AlarmActivity extends AppCompatActivity{
         timeText=(TextView)findViewById(R.id.time);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                |WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+                |WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                |WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.music);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
-        new Thread(new Runnable(){
+       /*new Thread(new Runnable(){//이게 왜 new thread에서 실행이 돼야하는거지 ㅠ
             @Override
                     public void run(){
-                while(flag==true){
+                        while(flag==true){
+
+                    //Toast.makeText(getApplicationContext(), "You clicked on the second item", Toast.LENGTH_SHORT).show();
+                    ///////여기 못들어옴!!!!!!
                     try{
                         calendar=Calendar.getInstance();
                         if(calendar.get(Calendar.HOUR_OF_DAY)>0&&calendar.get(Calendar.HOUR_OF_DAY)<12) {
@@ -52,7 +61,8 @@ public class AlarmActivity extends AppCompatActivity{
                     }catch(InterruptedException ex){}
                 }
         }
-        }).start();
+
+        }).start();*/
         //swipe button 밀어서 해제
         swipeButton.setOnStateChangeListener(new OnStateChangeListener(){
             @Override
