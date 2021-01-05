@@ -143,7 +143,9 @@ class GalleryAdapterHelper {
                 //if (file.isDirectory()) {
                 //    append(file);
                 //} else {
-                    if (!((file.toString().contains(".thumbnails")) && (file.toString().contains(".dat"))) && !file.isDirectory())
+                    if (!((file.toString().contains(".thumbnails")) && (file.toString().contains(".dat"))) && !file.isDirectory() &&
+                            (file.toString().toLowerCase().contains(".jpg") || file.toString().toLowerCase().contains(".png") ||
+                                    file.toString().toLowerCase().contains(".jpeg") || file.toString().toLowerCase().contains(".bmp")))
                         pathList.add(file);
                 //}  
             }
