@@ -1,51 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:background="@drawable/alarm_background"
-   >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
 
-    <com.ebanx.swipebtn.SwipeButton
-        android:id="@+id/swipe_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
-        android:layout_marginBottom="117dp"
-        app:button_background="@drawable/shape_button"
-        app:button_bottom_padding="100dp"
-        app:button_image_disabled="@drawable/alarm"
-        app:button_image_enabled="@drawable/alarm"
-        app:button_image_height="60dp"
-        app:button_image_width="100dp"
-        app:button_left_padding="20dp"
-        app:button_right_padding="20dp"
-        app:button_top_padding="20dp"
-        app:has_activate_state="true"
-        app:initial_state="disabled"
-        app:inner_text="알람 시간이 되었습니다!"
-        app:inner_text_background="@drawable/shape_rounded"
-        app:inner_text_bottom_padding="18dp"
-        app:inner_text_color="@android:color/white"
-        app:inner_text_left_padding="80dp"
-        app:inner_text_size="16sp"
-        app:inner_text_top_padding="18dp" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/timeView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/timer"
+            android:gravity="center"
+            android:text="00:00:00:00"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/button"
+                android:text="시작" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_record"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="3dp"
+                    android:background="@drawable/button"
+                    android:text="기록"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btn_pause"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="3dp"
+                    android:background="@drawable/button"
+                    android:text="일시정지"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/btn_stop"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button"
+                    android:text="중지"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:text="기록"
+            android:textSize="22dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp">
+
+        </View>
+
+        <TextView
+            android:id="@+id/recordView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text=""
+            android:textSize="22dp" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>

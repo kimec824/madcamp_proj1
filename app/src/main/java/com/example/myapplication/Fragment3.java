@@ -1,16 +1,21 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,78 +31,141 @@ import static android.os.Build.VERSION_CODES.M;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Fragment3 extends Fragment {
-    //AlarmManager alarm_manager;//알람매니저
-    //TimePicker alarm_timepicker;//타임피커
-    Button add_button;
-    int alarmHour;
-    int alarmMinute;
-    Calendar alarmCalendar;
-   // Context context;
 
-    public static Fragment3 newInstance() {
+
+    //boolean test=false;
+    /*public static Fragment3 newInstance() {
 
         Bundle args = new Bundle();
 
         Fragment3 fragment = new Fragment3();
         fragment.setArguments(args);
         return fragment;
-    }
+    }*/
 
 
-    @Nullable
+    private Button mStartBtn, mStopBtn, mRecordBtn, mPauseBtn;
+    private TextView mTimeTextView, mRecordTextView;
+    private Thread timeThread = null;
+    private Boolean isRunning = true;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.alarm_execute, container, false);
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getActivity().getWindow().setStatusBarColor(Color.parseColor("#4ea1d3"));
+        }
 
-        View view = inflater.inflate(R.layout.fragment3_layout, container, false);
-        super.onViewCreated(view,savedInstanceState);
-        //AlarmManager alarm_manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        //alarm_timepicker = view.findViewById(R.id.timePicker);
-        add_button = (Button)view.findViewById(R.id.alarmButton);
-        //final Intent my_intent=new Intent(getActivity(),Alarm_Reciever.class);//알람 리시버버
-        add_button.setOnClickListener(new View.OnClickListener() {
+        mStartBtn = (Button) view.findViewById(R.id.btn_start);
+        mStopBtn = (Button) view.findViewById(R.id.btn_stop);
+        mRecordBtn = (Button) view.findViewById(R.id.btn_record);
+        mPauseBtn = (Button) view.findViewById(R.id.btn_pause);
+        mTimeTextView = (TextView) view.findViewById(R.id.timeView);
+        mRecordTextView = (TextView) view.findViewById(R.id.recordView);
+
+        mStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getContext(), Alarm_add.class);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(), android.R.style.Theme_Holo_Light_Dialog, new TimePickerDialog.OnTimeSetListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.M)
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        alarmHour = hourOfDay;
-                        alarmMinute = minute;
-                        setAlarm();
-                    }
-                }, alarmHour, alarmMinute, false);
-                timePickerDialog.show();
+                v.setVisibility(View.GONE);
+                mStopBtn.setVisibility(View.VISIBLE);
+                mRecordBtn.setVisibility(View.VISIBLE);
+                mPauseBtn.setVisibility(View.VISIBLE);
+
+                timeThread = new Thread(new timeThread());
+                timeThread.start();
+            }
+        });
+
+        mStopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setVisibility(View.GONE);
+                mRecordBtn.setVisibility(View.GONE);
+                mStartBtn.setVisibility(View.VISIBLE);
+                mPauseBtn.setVisibility(View.GONE);
+                mRecordTextView.setText("");
+                timeThread.interrupt();
+            }
+        });
+
+        mRecordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecordTextView.setText(mRecordTextView.getText() + mTimeTextView.getText().toString() + "\n");
+            }
+        });
+
+        mPauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isRunning = !isRunning;
+                if (isRunning) {
+                    mPauseBtn.setText("일시정지");
+                } else {
+                    mPauseBtn.setText("시작");
+                }
             }
         });
         return view;
     }
-    void setAlarm() {
-        alarmCalendar = Calendar.getInstance();
-        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(Calendar.HOUR_OF_DAY,alarmHour);
-        alarmCalendar.set(Calendar.MINUTE,alarmMinute);
-        alarmCalendar.set(Calendar.SECOND,0);
-        //TimePickerDialog에서 설정한 시간을 알람시간으로 설정
-        //System.out.println(alarmCalendar.getTime());
-        if(alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE,1);
-        Intent alarmIntent=new Intent(getActivity().getApplicationContext(),Alarm_Receiver.class);///////
-        AlarmManager alarmManager=(AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);/////////
-        alarmIntent.setAction(Alarm_Receiver.ACTION_RESTART_SERVICE);
-        PendingIntent alarmCallPendingIntent=PendingIntent.getBroadcast(getContext(),0,alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);/////
-        //alarmManager.set(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
-        //startActivity(alarmIntent);
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
-        {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,alarmCalendar.getTimeInMillis(),alarmCallPendingIntent);
-        }
-        else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
-        }
-
+    @Override
+    public void onDestroyView(){
+        //test=true;
+        mTimeTextView=null;
+        mRecordTextView=null;
+        super.onDestroyView();
     }
 
 
 
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+
+        @Override
+            public void handleMessage(Message msg) {
+            int mSec = msg.arg1 % 100;
+            int sec = (msg.arg1 / 100) % 60;
+            int min = (msg.arg1 / 100) / 60;
+            int hour = (msg.arg1 / 100) / 360;
+            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+
+            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d:%02d", hour, min, sec, mSec);
+            if (result.equals("00:01:15:00")) {
+                Toast.makeText(getContext(), "1분 15초가 지났습니다.", Toast.LENGTH_SHORT).show();
+            }
+            mTimeTextView.setText(result);
+        }
+    };
+
+    public class timeThread implements Runnable {
+        @Override
+        public void run() {
+            int i = 0;
+
+
+            while (true) {
+                while (isRunning) { //일시정지를 누르면 멈춤
+                    Message msg = new Message();
+                    msg.arg1 = i++;
+                    handler.sendMessage(msg);
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable(){
+                            @Override
+                            public void run() {
+                                mTimeTextView.setText("");
+                                mTimeTextView.setText("00:00:00:00");
+                            }
+                        });
+                        return; // 인터럽트 받을 경우 return
+                    }
+                }
+            }
+        }
+    }
 }
