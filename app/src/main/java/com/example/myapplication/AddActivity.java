@@ -13,8 +13,8 @@ public class AddActivity extends AppCompatActivity {
     EditText nameText;
     String name = "";
     EditText phonenumberText;
-    EditText relationship;
-    EditText memo;
+    //EditText relationship;
+    //EditText memo;
     Button button;
     ContactList contacts = ContactList.getInstance();
     CreateContact cc = new CreateContact();
@@ -27,8 +27,8 @@ public class AddActivity extends AppCompatActivity {
 
         nameText= (EditText)findViewById(R.id.Editname);
         phonenumberText= (EditText)findViewById(R.id.Editphonenumber);
-        relationship= (EditText)findViewById(R.id.Editrelationship);
-        memo= (EditText)findViewById(R.id.Editmemo);
+        //relationship= (EditText)findViewById(R.id.Editrelationship);
+        //memo= (EditText)findViewById(R.id.Editmemo);
 
         button = (Button)findViewById(R.id.Confirmbutton);
 
